@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Postulación a Becas</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 700px; margin: auto; padding: 20px; background: #f7f7f7; }
+    h1 { text-align: center; }
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    input, select, button { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
+    button { margin-top: 20px; background-color: #0073e6; color: white; border: none; cursor: pointer; font-size: 16px; }
+    button:hover { background-color: #005bb5; }
+    .resultado { margin-top: 25px; font-size: 20px; font-weight: bold; color: green; }
+  </style>
+</head>
+<body>
+  <h1>Formulario de Postulación a Becas</h1>
+
+  <form id="becaForm">
+    <label for="nombre">Nombre completo</label>
+    <input type="text" id="nombre" required />
+
+    <label for="documento">Documento de identidad</label>
+    <input type="text" id="documento" required />
+
+    <label for="pais">País de residencia</label>
+    <input type="text" id="pais" required />
+
+    <label for="correo">Correo electrónico</label>
+    <input type="email" id="correo" required />
+
+    <label for="celular">Celular</label>
+    <input type="tel" id="celular" required />
+
+    <label for="carrera">Carrera universitaria</label>
+    <input type="text" id="carrera" required />
+
+    <label for="universidad">Universidad donde terminaste tu carrera</label>
+    <input type="text" id="universidad" required />
+
+    <label for="experiencia">Años de experiencia</label>
+    <select id="experiencia" required>
+      <option value="0">0 años</option>
+      <option value="3">3 años</option>
+      <option value="5">5 años</option>
+      <option value="10">10 años</option>
+      <option value="15">Más de 10 años</option>
+    </select>
+
+    <label for="empresa">Empresa donde laboras</label>
+    <input type="text" id="empresa" />
+
+    <label for="cargo">Cargo que ejerces</label>
+    <select id="cargo" required>
+      <option value="practicante">Practicante</option>
+      <option value="analista">Analista</option>
+      <option value="coordinador">Coordinador</option>
+      <option value="jefe">Jefe</option>
+      <option value="gerente">Gerente</option>
+    </select>
+
+    <label for="programa">Programa de interés</label>
+    <select id="programa" required>
+      <option value="MBA">MBA</option>
+      <option value="ADSAL">ADSAL</option>
+      <option value="DM">DM</option>
+      <option value="EM">EM</option>
+      <option value="DS">DS</option>
+    </select>
+
+    <label for="fechaInicio">Fecha de inicio de clases</label>
+    <select id="fechaInicio" required>
+      <option value="junio">Junio</option>
+      <option value="setiembre">Setiembre</option>
+      <option value="otro">Más adelante</option>
+    </select>
+
+    <button type="submit">Enviar</button>
+  </form>
+
+  <div class="resultado" id="resultado"></div>
+
+  <script>
+    document.getElementById("becaForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const experiencia = parseInt(document.getElementById("experiencia").value);
+      const cargo = document.getElementById("cargo").value;
+      const fecha = document.getElementById("fechaInicio").value;
+      const universidad = document.getElementById("universidad").value.toLowerCase();
+
+      let puntos = 0;
+
+      // Años de experiencia
+      if (experiencia >= 10) puntos += 30;
+      else if (experiencia >= 5) puntos += 20;
+      else if (experiencia >= 3) puntos += 10;
+
+      // Cargo
+      switch (cargo) {
+        case "practicante": puntos += 5; break;
+        case "analista": puntos += 10; break;
+        case "coordinador": puntos += 15; break;
+        case "jefe": puntos += 20; break;
+        case "gerente": puntos += 25; break;
+      }
+
+      // Universidad - ejemplo simple
+      if (universidad.includes("católica") || universidad.includes("pucp") || universidad.includes("pacífico")) {
+        puntos += 15;
+      }
+
+      // Fecha de inicio
+      if (fecha === "junio") puntos += 10;
+      else if (fecha === "setiembre") puntos += 5;
+
+      // Asignar beca
+      let beca = "0%";
+      let fiu = false;
+
+      if (puntos >= 90) beca = "25%";
+      else if (puntos >= 75) beca = "20%";
+      else if (puntos >= 60) beca = "15%";
+      else if (puntos >= 45) { beca = "10%"; fiu = true; }
+      else if (puntos >= 30) { beca = "5%"; fiu = true; }
+
+      // Mostrar resultado
+      document.getElementById("resultado").innerText =
+        `Tu beca estimada es: ${beca}${fiu ? " (incluye FIU)" : ""}`;
+
+      // Aquí puedes hacer algo con los datos, por ejemplo enviarlos a un backend o Google Sheets (esto es solo demo)
+    });
+  </script>
+</body>
+</html>
